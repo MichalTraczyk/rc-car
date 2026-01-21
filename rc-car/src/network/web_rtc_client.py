@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceCandidate, RTCConfiguration, RTCIceServer
+from aiortc.sdp import candidate_from_sdp
 import socketio
 
 logger = logging.getLogger(__name__)
@@ -150,11 +151,9 @@ class RCCarWebRTCClient:
 
             logger.info("Received ICE candidate")
 
-            candidate = RTCIceCandidate(
-                candidate=candidate_data['candidate'],
-                sdpMid=candidate_data['sdpMid'],
-                sdpMLineIndex=candidate_data['sdpMLineIndex']
-            )
+            candidate = candidate_from_sdp(candidate_data['candidate'])
+            candidate.sdpMid = candidate_data.get('sdpMid')
+            candidate.sdpMLineIndex = candidate_data.get('sdpMLineIndex')
 
             await self.pc.addIceCandidate(candidate)
 
