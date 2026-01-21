@@ -34,6 +34,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY rc_car.py .
+COPY src ./src
 
 # Expose ports (not strictly necessary but good practice)
 EXPOSE 5050
